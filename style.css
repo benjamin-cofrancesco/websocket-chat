@@ -19,6 +19,7 @@ body {
   overflow: hidden;
   font-size: 13px;
   line-height: 1.5;
+  position: relative;
 }
 
 ul {
@@ -30,6 +31,19 @@ ul {
   margin-bottom: 80px;
   scrollbar-width: thin;
   scrollbar-color: #4a4a4a #0e0e10;
+  position: relative;
+}
+
+/* Add fade effect at the bottom */
+ul::after {
+  content: '';
+  position: fixed;
+  bottom: 80px; /* Height of the input area */
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, #0e0e10);
+  pointer-events: none;
 }
 
 /* Webkit scrollbar styling */
@@ -111,10 +125,23 @@ button:hover {
 }
 
 .message {
-  padding: 6px 8px;
   margin: 2px 0;
   line-height: 1.5;
   word-break: break-word;
+  animation: messageIn 0.3s ease-in-out;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+@keyframes messageIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .username {
@@ -162,7 +189,6 @@ button:hover {
   color: #a330c9;
 }
 
-/* Dialog Styles */
 dialog {
   padding: 24px;
   border: 1px solid #303032;
@@ -293,4 +319,15 @@ dialog::backdrop {
 
 .close-dialog:hover {
   background-color: #3a3a3d;
+}
+
+/* Emote styles */
+.emote {
+  vertical-align: middle;
+  height: 28px;
+  margin: 0 2px;
+}
+
+.emote.animated {
+  image-rendering: crisp-edges;
 }

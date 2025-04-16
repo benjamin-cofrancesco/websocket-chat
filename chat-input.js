@@ -21,6 +21,10 @@ class ChatInput extends HTMLFormElement {
       throw new Error("You have not been autheticated. Please login");
     }
 
+    if (!value) {
+      throw new Error("You cannot send an empty message");
+    }
+
     this.input.value = "";
 
     const data = {
