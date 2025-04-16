@@ -13,10 +13,21 @@ class ChatMessages extends HTMLUListElement {
     return string;
   }
 
-  updateMessage(msg) {
-    // Definitly more extensive on other chat services;
-    // Lets keep it a little pg;
+  messageSanitise(msg) {
+    return msg.replace(/[&<>"']/g, function(match) {
+      const escape = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      };
+      return escape[match];
+    });
+  }
 
+  updateMessage(msg) {
+    // First do the naughty word replacements on the raw text
     const naughtyWords = {
       fuck: this.starMessage(4),
       shit: this.starMessage(4),
@@ -30,16 +41,16 @@ class ChatMessages extends HTMLUListElement {
     let updated = msg;
 
     for (const [word, replacer] of Object.entries(naughtyWords)) {
-      if (!msg.includes(word)) {
+      if (!updated.includes(word)) {
         continue;
       }
-
       updated = updated.replaceAll(word, replacer);
     }
 
-    for (const [emote, html] of Object.entries(emotes)) {
-      if (!msg.includes(emote)) continue;
+    updated = this.messageSanitise(updated);
 
+    for (const [emote, html] of Object.entries(emotes)) {
+      if (!updated.includes(emote)) continue;
       updated = updated.replaceAll(emote, html);
     }
 
@@ -49,11 +60,15 @@ class ChatMessages extends HTMLUListElement {
   handleMessage(e) {
     const { user, message } = e.detail;
 
+    const { userName, color } = JSON.parse(user);
+
     const msg = this.updateMessage(message);
 
     const messageEl = `<li class="message">
-      <span class="message-user">${user}</span>
-      <span class="message-text">${msg}</span>
+      <span class="username color-${color}">
+        ${userName}:
+      </span>
+      <span class="message-text"> ${msg}</span>
       </li>`;
 
     this.insertAdjacentHTML("beforeend", messageEl);
