@@ -1,53 +1,28 @@
 class Auth {
   constructor() {
-    const randomUserNames = {
-      1: "Bessy",
-      2: "Tim",
-      3: "Zac",
-      4: "Ollie",
-      5: "Benny",
-      6: "Rachel",
-      7: "Luke",
-    };
+    this.user = this.getUser();
+  }
 
-    const colors = {
-      1: "blue",
-      2: "coral",
-      3: "dodgerblue",
-      4: "springgreen",
-      5: "yellowgreen",
-      6: "green",
-      7: "orangered",
-      8: "red",
-      9: "goldenrod",
-      10: "hotpink",
-      11: "cadetblue",
-      12: "seagreen",
-      13: "purple",
-    };
+  getUser() {
+    const user = localStorage.getItem("user");
 
-    const randomColor = () =>
-      Math.floor(Math.random() * (Object.entries(colors).length - 1 + 1) + 1);
-
-    const randomAuth = () =>
-      Math.floor(
-        Math.random() * (Object.entries(randomUserNames).length - 1 + 1) + 1,
-      );
-
-    if (!window.localStorage.getItem("user")) {
-      const authToken =
-        window.localStorage.getItem("authToken") || randomAuth();
-
-      window.localStorage.setItem("authToken", authToken);
-      window.localStorage.setItem(
-        "user",
-        JSON.stringify({
-          userName: randomUserNames[authToken],
-          color: randomColor(),
-        }),
-      );
+    if (user) {
+      return JSON.parse(user);
     }
+
+    const userName = prompt("What is your username?");
+
+    const userData = {
+      userName,
+      color: getRandomColor(),
+    };
+
+    localStorage.setItem("user", JSON.stringify(userData));
+
+    return userData;
   }
 }
+
+customElements.define("chat-auth", Auth);
 
 new Auth();
