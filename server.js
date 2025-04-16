@@ -11,6 +11,8 @@ const MASKED_KEY = 4;
 const OPCODE_TEXT = 0x01;
 const MAXIMUM_SIXTEEN_BITS_INTEGER = 2 ** 16;
 
+const clients = new Set();
+
 const server = createServer((req, res) => {
   res.writeHead(200);
   res.end("yo");
@@ -23,6 +25,12 @@ const handleSocketUpgrade = (req, socket, head) => {
 
   socket.write(headers);
   socket.on("readable", () => onSocketOnReadable(socket));
+
+  clients.add(socket);
+
+  socket.on("close", () => {
+    clients.delete(socket);
+  });
 };
 
 const unmask = (encoded, maskedKey) => {
@@ -119,6 +127,17 @@ const onSocketOnReadable = (socket) => {
   });
 
   sendMessage(msg, socket);
+
+  broadcast(msg, socket);
+};
+
+const broadcast = (msg, sender) => {
+  const data = prepareMessage(msg);
+  for (const client of clients) {
+    if (client !== sender && client.writable) {
+      client.write(data);
+    }
+  }
 };
 
 const handleSocketHandshake = (id) => {
