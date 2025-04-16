@@ -161,3 +161,94 @@ button:hover {
 .username.color-purple {
   color: #a330c9;
 }
+
+/* Dialog Styles */
+dialog {
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background-color: #18181b;
+  color: #efeff1;
+  min-width: 320px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dialog-content {
+  padding: 20px;
+}
+
+.dialog-content h2 {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 12px;
+  max-width: 360px;
+  margin: 0 auto 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.color-option {
+  aspect-ratio: 1;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+  transition: transform 0.2s, border-color 0.2s;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+}
+
+.color-option:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.5);
+  z-index: 1;
+}
+
+.color-option .color-name {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  white-space: nowrap;
+  color: #efeff1;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 2px 6px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.color-option:hover .color-name {
+  opacity: 1;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.close-dialog {
+  background-color: #303032;
+}
+
+.close-dialog:hover {
+  background-color: #3a3a3d;
+}
